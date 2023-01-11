@@ -9,7 +9,7 @@ const hostOptions = {
   servername: 'translate.googleapis.com',
 }
 
-export function checkIP(ipOrMirror: string, timeout = 10 * 1000) {
+export function check(ipOrMirror: string, timeout = 10 * 1000) {
   const isIP = r.test(ipOrMirror)
   return new Promise<
     | { valid: true; time: number }
@@ -63,7 +63,3 @@ export function checkIP(ipOrMirror: string, timeout = 10 * 1000) {
     })
   })
 }
-
-// checkIP('translate.amz.wang').then(console.log)
-// checkIP('108.177.97.100').then(console.log)
-// checkIP('142.250.4.90').then(console.log)

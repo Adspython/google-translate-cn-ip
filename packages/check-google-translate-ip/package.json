@@ -1,13 +1,23 @@
 {
   "name": "@hcfy/check-google-translate-ip",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
     "clean": "rm -rf dist",
     "build:mjs": "tsc -p tsconfig.build.json -m ESNext -d && js-to-mjs dist",
     "build:cjs": "tsc -p tsconfig.build.json -m CommonJS",
     "build": "npm run build:mjs && npm run build:cjs",
-    "dev": "nodemon --watch src -e ts --exec \"npm run build\""
+    "dev": "nodemon --watch src -e ts --exec \"npm run build\"",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@hcfy/js-to-mjs": "^1.0.0",
@@ -17,6 +27,16 @@
   },
   "files": [
     "dist"
+  ],
+  "homepage": "https://github.com/hcfyapp/check-google-translate-ip/tree/main/packages/check-google-translate-ip#readme",
+  "bugs": "https://github.com/hcfyapp/check-google-translate-ip/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hcfyapp/check-google-translate-ip.git"
+  },
+  "keywords": [
+    "google",
+    "translate"
   ],
   "license": "MIT"
 }
