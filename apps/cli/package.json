@@ -1,0 +1,28 @@
+{
+  "name": "@hcfy/check-google-translate-ip-cli",
+  "version": "1.0.0",
+  "description": "",
+  "bin": {
+    "ggc": "./dist/index.js"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -w",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hcfyapp/check-google-translate-ip.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hcfyapp/check-google-translate-ip/issues"
+  },
+  "homepage": "https://github.com/hcfyapp/check-google-translate-ip#readme",
+  "dependencies": {
+    "@hcfy/check-google-translate-ip": "^1.0.0",
+    "commander": "^9.5.0",
+    "https-proxy-agent": "^5.0.1"
+  }
+}
