@@ -7,11 +7,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hcfyapp/check-google-translate-ip.git"
+    "url": "git+https://github.com/hcfyapp/google-translate-cn-ip.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hcfyapp/check-google-translate-ip/issues"
+    "url": "https://github.com/hcfyapp/google-translate-cn-ip/issues"
   },
-  "homepage": "https://github.com/hcfyapp/check-google-translate-ip#readme"
+  "homepage": "https://github.com/hcfyapp/google-translate-cn-ip/tree/master/packages/google-translate-ip#readme"
 }

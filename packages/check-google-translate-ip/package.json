@@ -28,11 +28,11 @@
   "files": [
     "dist"
   ],
-  "homepage": "https://github.com/hcfyapp/check-google-translate-ip/tree/main/packages/check-google-translate-ip#readme",
-  "bugs": "https://github.com/hcfyapp/check-google-translate-ip/issues",
+  "homepage": "https://github.com/hcfyapp/google-translate-cn-ip/tree/master/packages/check-google-translate-ip#readme",
+  "bugs": "https://github.com/hcfyapp/google-translate-cn-ip/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hcfyapp/check-google-translate-ip.git"
+    "url": "https://github.com/hcfyapp/google-translate-cn-ip.git"
   },
   "keywords": [
     "google",
