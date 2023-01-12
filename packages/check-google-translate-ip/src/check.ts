@@ -2,6 +2,7 @@ import https from 'node:https'
 
 const r = /^[0-9.]+$/
 
+// @see https://stackoverflow.com/a/53581777
 const hostOptions = {
   headers: {
     Host: 'translate.googleapis.com',

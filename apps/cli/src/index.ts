@@ -52,8 +52,10 @@ Example call:
     agent?: https.Agent
   ) {
     let l: string[]
-    if (file || url) {
-      l = await readListFormFileOrURL(str, url, agent)
+    if (file) {
+      l = (await readFileFromFileSystem(str)).split(/\r?\n/)
+    } else if (url) {
+      l = (await readFileFromURL(str, agent)).split(/\r?\n/)
     } else {
       l = str.split(',')
     }
@@ -205,17 +207,6 @@ function readFileFromURL(url: string, agent?: https.Agent) {
       reject(err)
     })
   })
-}
-
-async function readListFormFileOrURL(
-  pathOrUrl: string,
-  url: boolean,
-  agent?: https.Agent
-) {
-  const string = await (url
-    ? readFileFromURL(pathOrUrl, agent)
-    : readFileFromFileSystem(pathOrUrl))
-  return string.split(/\r?\n/)
 }
 
 function getErrorMessage(e: unknown) {
