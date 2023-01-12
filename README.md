@@ -16,7 +16,7 @@ https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt
 
 ## 如何测试 IP 是否可用
 
-见 `apps/cli/README.md`。
+见 [apps/cli/README.md](https://github.com/hcfyapp/google-translate-cn-ip/tree/master/apps/cli)。
 
 ## 如何使用
 
