@@ -36,7 +36,7 @@ Please wait a moment, this may take a little time (up to 10 seconds)...
 Load the IP / Host to be checked from URL:
 
 ```text
-$ ggc -u https://raw.githubusercontent.com/hcfyapp/google-translate-cn-ip/main/ips.txt
+$ ggc -u https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt
 Please wait a moment, this may take a little time (up to 10 seconds)...
 ...
 ```
@@ -45,7 +45,7 @@ When loading the IP from the URL, you can specify to download this file through 
 
 ```text
 $ export $https_proxy=http://example.com
-$ ggc -u https://raw.githubusercontent.com/hcfyapp/google-translate-cn-ip/main/ips.txt
+$ ggc -u https://raw.githubusercontent.com/hcfyapp/google-translate-cn-ip/master/packages/google-translate-ip/ips.txt
 This proxy will be used to download file: http://example.com
 It will not be used to check if the IP / Host is available.
 

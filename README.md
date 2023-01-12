@@ -6,6 +6,10 @@
 
 ## 可用 IP 列表
 
+可用 IP 会不定时更新在以下文件当中：
+
+https://github.com/hcfyapp/google-translate-cn-ip/blob/master/packages/google-translate-ip/ips.txt
+
 你可以通过以下链接读取到这个文件的最新内容：
 
 https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt
