@@ -6,6 +6,8 @@ First, install it globally:
 npm i -g @hcfy/check-google-translate-ip-cli
 ```
 
+Note: Please turn off the TUN / TAP mode of the proxy software before use, otherwise it may go through the proxy when detecting whether the IP is available, which will lead to inaccurate test results.
+
 Check if multiple IP / Host are available:
 
 ```text
@@ -27,6 +29,8 @@ Load the IP / Host to be checked from the file:
 
 ```text
 $ ggc -f ips.txt
+Please wait a moment, this may take a little time (up to 10 seconds)...
+...
 ```
 
 Load the IP / Host to be checked from URL:
