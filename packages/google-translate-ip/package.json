@@ -1,0 +1,17 @@
+{
+  "name": "@hcfy/google-translate-ip",
+  "version": "1.0.0",
+  "description": "",
+  "files": [
+    "ips.txt"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hcfyapp/check-google-translate-ip.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hcfyapp/check-google-translate-ip/issues"
+  },
+  "homepage": "https://github.com/hcfyapp/check-google-translate-ip#readme"
+}
