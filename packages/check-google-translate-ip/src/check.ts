@@ -1,5 +1,11 @@
 import https from 'node:https'
 
+export type CheckResult =
+  | { host: string; valid: true; time: number }
+  | { host: string; valid: false; timeout: true }
+  | { host: string; valid: false; error: unknown }
+  | { host: string; valid: false; statusCode: number }
+
 const r = /^[0-9.]+$/
 
 // @see https://stackoverflow.com/a/53581777
@@ -10,26 +16,12 @@ const hostOptions = {
   servername: 'translate.googleapis.com',
 }
 
-export function check(ipOrMirror: string, timeout = 10 * 1000) {
-  const isIP = r.test(ipOrMirror)
-  return new Promise<
-    | { valid: true; time: number }
-    | {
-        valid: false
-        timeout: true
-      }
-    | {
-        valid: false
-        error: unknown
-      }
-    | {
-        valid: false
-        statusCode: number
-      }
-  >((resolve) => {
+export function check(host: string, timeout = 10 * 1000) {
+  const isIP = r.test(host)
+  return new Promise<CheckResult>((resolve) => {
     const now = Date.now()
     const req = https.get(
-      `https://${ipOrMirror}/translate_a/element.js`,
+      `https://${host}/translate_a/element.js`,
       {
         timeout,
         ...(isIP ? hostOptions : {}),
@@ -39,11 +31,12 @@ export function check(ipOrMirror: string, timeout = 10 * 1000) {
         const valid = res.statusCode === 200
         if (valid) {
           resolve({
+            host,
             time,
             valid: true,
           })
         } else {
-          resolve({ valid: false, statusCode: res.statusCode! })
+          resolve({ host, valid: false, statusCode: res.statusCode! })
         }
         // Consume response data to free up memory
         // @see https://nodejs.org/docs/latest-v18.x/api/http.html#class-httpclientrequest
@@ -52,12 +45,13 @@ export function check(ipOrMirror: string, timeout = 10 * 1000) {
     )
 
     req.on('timeout', () => {
-      resolve({ valid: false, timeout: true })
+      resolve({ host, valid: false, timeout: true })
       req.destroy()
     })
 
     req.on('error', (err) => {
       resolve({
+        host,
         valid: false,
         error: err,
       })
