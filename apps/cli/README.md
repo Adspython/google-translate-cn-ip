@@ -44,6 +44,8 @@ Start detecting. This takes a little time, up to 10 seconds.
 
 ### Load the IP / Host to be checked from a file
 
+IP addresses / host in ips.txt need to be separated by line breaks.
+
 ```text
 $ ggc -f ips.txt
 Loading file...
