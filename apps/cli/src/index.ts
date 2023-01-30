@@ -3,7 +3,7 @@
 import { program } from 'commander'
 import fs from 'node:fs/promises'
 import https from 'node:https'
-import { check } from '@hcfy/check-google-translate-ip'
+import { checkAll } from '@hcfy/check-google-translate-ip'
 import HttpsProxyAgent = require('https-proxy-agent')
 
 async function main() {
@@ -93,59 +93,7 @@ Example call:
     'Please wait a moment, this may take a little time (up to 10 seconds)...'
   )
 
-  const results = await Promise.allSettled(
-    list.map((ipOrHost) => check(ipOrHost))
-  )
-
-  const sorted = results
-    .map((r, index) => {
-      if (r.status === 'fulfilled') {
-        return {
-          ipOrHost: list[index],
-          ...r.value,
-        }
-      } else {
-        return {
-          ipOrHost: list[index],
-          valid: false as const,
-          error: r.reason as unknown,
-        }
-      }
-    })
-    .sort((a, b) => {
-      // 如果两个都是可用的，则响应时间少的排前面
-      if (a.valid && b.valid) {
-        return a.time - b.time
-      }
-
-      // 如果两个都不可用
-      if (!a.valid && !b.valid) {
-        if (
-          ('statusCode' in a && 'statusCode' in b) ||
-          ('error' in a && 'error' in b) ||
-          ('timeout' in a && 'timeout' in b)
-        ) {
-          return 0
-        }
-
-        // status code 不为 200 的排在前面
-        if ('statusCode' in a || 'statusCode' in b) {
-          return 'statusCode' in b ? 1 : -1
-        }
-
-        // 其次是 error
-        if ('error' in a || 'error' in b) {
-          return 'error' in b ? 1 : -1
-        }
-
-        // 最后是超时的
-        if ('timeout' in b || 'timeout' in b) {
-          return 'timeout' in b ? 1 : -1
-        }
-      }
-      if (!a.valid) return 1
-      return -1
-    })
+  const sorted = await checkAll(list)
 
   // 生成公告里需要的 markdown 形式
   // TODO: 可以加个参数来输出这种格式
@@ -165,7 +113,7 @@ Example call:
   console.table(
     sorted.map((v) => {
       return {
-        'IP / Host': v.ipOrHost,
+        'IP / Host': v.host,
         Available: v.valid ? 'Yes' : 'No',
         'Status Code': v.valid ? 200 : 'statusCode' in v ? v.statusCode : 'N/A',
         'Response time': v.valid ? v.time + 'ms' : 'N/A',
