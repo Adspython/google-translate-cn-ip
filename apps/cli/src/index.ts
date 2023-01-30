@@ -6,10 +6,61 @@ import https from 'node:https'
 import { checkAll } from '@hcfy/check-google-translate-ip'
 import HttpsProxyAgent = require('https-proxy-agent')
 
+function getErrorMessage(e: unknown) {
+  if (e instanceof Error) {
+    return e.message
+  }
+  return 'Unknown error.'
+}
+
+async function readFileFromFileSystem(path: string) {
+  return fs.readFile(path, { encoding: 'utf-8' })
+}
+
+function readFileFromURL(url: string, agent?: https.Agent) {
+  return new Promise<string>((resolve, reject) => {
+    const req = https.get(url, { agent }, (res) => {
+      if (res.statusCode !== 200) {
+        reject(
+          new Error('Request Failed with status code ' + res.statusCode + '.')
+        )
+        res.resume()
+        return
+      }
+      let rawData = ''
+      res.on('data', (chunk) => {
+        rawData += chunk
+      })
+      res.on('end', () => {
+        resolve(rawData)
+      })
+    })
+    req.on('error', (err) => {
+      reject(err)
+    })
+  })
+}
+
 type IPSource =
   | { type: 'list'; value: string }
   | { type: 'file'; value: string }
   | { type: 'url'; value: string }
+
+async function getList(source: IPSource, agent?: https.Agent) {
+  let l: string[]
+  if (source.type === 'file') {
+    console.log('Loading file...')
+    l = (await readFileFromFileSystem(source.value)).split(/\r?\n/)
+    console.log('Done.\n')
+  } else if (source.type === 'url') {
+    console.log('Downloading the file from ' + source.value)
+    l = (await readFileFromURL(source.value, agent)).split(/\r?\n/)
+    console.log('Done.\n')
+  } else {
+    l = source.value.split(',')
+  }
+  return l.map((s) => s.trim()).filter((s) => !!s)
+}
 
 async function main() {
   program
@@ -63,22 +114,6 @@ Example call:
   }
 
   // console.log(source)
-
-  async function getList(source: IPSource, agent?: https.Agent) {
-    let l: string[]
-    if (source.type === 'file') {
-      console.log('Loading file...')
-      l = (await readFileFromFileSystem(source.value)).split(/\r?\n/)
-      console.log('Done.\n')
-    } else if (source.type === 'url') {
-      console.log('Downloading the file from ' + source.value)
-      l = (await readFileFromURL(source.value, agent)).split(/\r?\n/)
-      console.log('Done.\n')
-    } else {
-      l = source.value.split(',')
-    }
-    return l.map((s) => s.trim()).filter((s) => !!s)
-  }
 
   let agent: https.Agent | undefined
   if (source.type === 'url') {
@@ -138,41 +173,6 @@ Example call:
       }
     })
   )
-}
-
-async function readFileFromFileSystem(path: string) {
-  return fs.readFile(path, { encoding: 'utf-8' })
-}
-
-function readFileFromURL(url: string, agent?: https.Agent) {
-  return new Promise<string>((resolve, reject) => {
-    const req = https.get(url, { agent }, (res) => {
-      if (res.statusCode !== 200) {
-        reject(
-          new Error('Request Failed with status code ' + res.statusCode + '.')
-        )
-        res.resume()
-        return
-      }
-      let rawData = ''
-      res.on('data', (chunk) => {
-        rawData += chunk
-      })
-      res.on('end', () => {
-        resolve(rawData)
-      })
-    })
-    req.on('error', (err) => {
-      reject(err)
-    })
-  })
-}
-
-function getErrorMessage(e: unknown) {
-  if (e instanceof Error) {
-    return e.message
-  }
-  return 'Unknown error.'
 }
 
 main()
