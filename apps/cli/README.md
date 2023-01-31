@@ -77,6 +77,6 @@ It will not be used to check if the IP / Host is available.
 Downloading the file from https://raw.githubusercontent.com/hcfyapp/google-translate-cn-ip/master/packages/google-translate-ip/ips.txt
 Done.
 
-Please wait a moment, this may take a little time (up to 10 seconds)...
+Start detecting. This takes a little time, up to 10 seconds.
 ...
 ```
