@@ -2,7 +2,9 @@
   "name": "google-translate-ip",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build-all": "nx run-many --target=build"
+  },
   "private": true,
   "devDependencies": {
     "nx": "^15.6.3",
