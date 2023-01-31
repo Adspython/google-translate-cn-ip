@@ -5,8 +5,8 @@
   "scripts": {},
   "private": true,
   "devDependencies": {
-    "nx": "^15.4.5",
-    "prettier": "^2.6.2"
+    "nx": "^15.6.3",
+    "prettier": "^2.8.3"
   },
   "workspaces": [
     "packages/*",

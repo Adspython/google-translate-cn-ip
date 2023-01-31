@@ -22,7 +22,7 @@
   "homepage": "https://github.com/hcfyapp/google-translate-cn-ip/tree/master/apps/cli#readme",
   "dependencies": {
     "@hcfy/check-google-translate-ip": "^1.0.0",
-    "commander": "^9.5.0",
+    "commander": "^10.0.0",
     "https-proxy-agent": "^5.0.1"
   }
 }
