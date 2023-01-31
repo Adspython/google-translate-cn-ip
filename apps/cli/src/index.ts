@@ -6,26 +6,83 @@ import https from 'node:https'
 import { checkAll } from '@hcfy/check-google-translate-ip'
 import HttpsProxyAgent = require('https-proxy-agent')
 
+function getErrorMessage(e: unknown) {
+  if (e instanceof Error) {
+    return e.message
+  }
+  return 'Unknown error.'
+}
+
+function readFileFromFileSystem(path: string) {
+  return fs.readFile(path, { encoding: 'utf-8' })
+}
+
+function readFileFromURL(url: string, agent?: https.Agent) {
+  return new Promise<string>((resolve, reject) => {
+    const req = https.get(url, { agent }, (res) => {
+      if (res.statusCode !== 200) {
+        reject(
+          new Error('Request Failed with status code ' + res.statusCode + '.')
+        )
+        res.resume()
+        return
+      }
+      let rawData = ''
+      res.on('data', (chunk) => {
+        rawData += chunk
+      })
+      res.on('end', () => {
+        resolve(rawData)
+      })
+    })
+    req.on('error', (err) => {
+      reject(err)
+    })
+  })
+}
+
+type IPSource =
+  | { type: 'list'; value: string }
+  | { type: 'file'; value: string }
+  | { type: 'url'; value: string }
+
+async function getList(source: IPSource, agent?: https.Agent) {
+  let l: string[]
+  if (source.type === 'file') {
+    console.log('Loading file...')
+    l = (await readFileFromFileSystem(source.value)).split(/\r?\n/)
+    console.log('Done.\n')
+  } else if (source.type === 'url') {
+    console.log('Downloading the file from ' + source.value)
+    l = (await readFileFromURL(source.value, agent)).split(/\r?\n/)
+    console.log('Done.\n')
+  } else {
+    l = source.value.split(',')
+  }
+  return l.map((s) => s.trim()).filter((s) => !!s)
+}
+
 async function main() {
   program
     .name('ggc')
     .description('Check Google Translate IP.')
     .argument(
-      '<ip / host list or file path>',
-      'A comma-separated list of IP addresses / host, or when the -f parameter is specified, the file path.'
+      '[IP / host list]',
+      'A comma-separated list of IP addresses / host.'
     )
     .option(
-      '-f, --file',
+      '-f, --file <file path>',
       'If you are providing a file path, you need to declare this parameter.'
     )
     .option(
-      '-u, --url',
+      '-u, --url <URL>',
       'If you are providing URL, you need to declare this parameter.'
     )
     .addHelpText(
       'after',
       `
 Example call:
+  $ ggc # Check the list of IPs from this URL: https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt
   $ ggc 172.253.114.90 # Check one IP address.
   $ ggc mirror.example.com # Check one host.
   $ ggc 172.253.114.90,mirror.example.com,142.250.9.90 # Check multiple IP addresses or host.
@@ -35,35 +92,31 @@ Example call:
     .showHelpAfterError('(add -h for additional information)')
     .parse()
 
-  const opts = program.opts<{ file?: boolean; url?: boolean }>()
+  const opts = program.opts<{ file?: string; url?: string }>()
+  const ipList = program.args[0]
 
-  if (opts.file && opts.url) {
-    console.log('error: `--file` and `--url` cannot be used at the same time..')
-    return
-  }
+  let source: IPSource
 
-  // console.log(opts)
-  // console.log(program.args[0])
-
-  async function getList(
-    str: string,
-    file: boolean,
-    url: boolean,
-    agent?: https.Agent
-  ) {
-    let l: string[]
-    if (file) {
-      l = (await readFileFromFileSystem(str)).split(/\r?\n/)
-    } else if (url) {
-      l = (await readFileFromURL(str, agent)).split(/\r?\n/)
-    } else {
-      l = str.split(',')
+  if (ipList) {
+    source = { type: 'list', value: ipList }
+  } else if (opts.file) {
+    source = { type: 'file', value: opts.file }
+  } else if (opts.url) {
+    source = {
+      type: 'url',
+      value: opts.url,
     }
-    return l.map((s) => s.trim()).filter((s) => !!s)
+  } else {
+    source = {
+      type: 'url',
+      value: 'https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt',
+    }
   }
+
+  // console.log(source)
 
   let agent: https.Agent | undefined
-  if (opts.url) {
+  if (source.type === 'url') {
     const proxyEndpoint = process.env.https_proxy || process.env.http_proxy
     if (proxyEndpoint) {
       console.log('This proxy will be used to download file: ' + proxyEndpoint)
@@ -77,21 +130,14 @@ Example call:
   let list: string[]
 
   try {
-    list = await getList(
-      program.args[0],
-      opts.file || false,
-      opts.url || false,
-      agent
-    )
+    list = await getList(source, agent)
   } catch (e) {
-    console.error('Failed to load the file. Error details:')
+    console.error('Failed to load host. Error details:')
     console.error(e)
     return
   }
 
-  console.log(
-    'Please wait a moment, this may take a little time (up to 10 seconds)...'
-  )
+  console.log('Start detecting. This takes a little time, up to 10 seconds.')
 
   const sorted = await checkAll(list)
 
@@ -127,41 +173,6 @@ Example call:
       }
     })
   )
-}
-
-async function readFileFromFileSystem(path: string) {
-  return fs.readFile(path, { encoding: 'utf-8' })
-}
-
-function readFileFromURL(url: string, agent?: https.Agent) {
-  return new Promise<string>((resolve, reject) => {
-    const req = https.get(url, { agent }, (res) => {
-      if (res.statusCode !== 200) {
-        reject(
-          new Error('Request Failed with status code ' + res.statusCode + '.')
-        )
-        res.resume()
-        return
-      }
-      let rawData = ''
-      res.on('data', (chunk) => {
-        rawData += chunk
-      })
-      res.on('end', () => {
-        resolve(rawData)
-      })
-    })
-    req.on('error', (err) => {
-      reject(err)
-    })
-  })
-}
-
-function getErrorMessage(e: unknown) {
-  if (e instanceof Error) {
-    return e.message
-  }
-  return 'Unknown error.'
 }
 
 main()

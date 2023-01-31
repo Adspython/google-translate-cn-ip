@@ -1,5 +1,7 @@
 # Google Translate IP / Host Checker
 
+## Install
+
 First, install it globally:
 
 ```zsh
@@ -8,11 +10,26 @@ npm i -g @hcfy/check-google-translate-ip-cli
 
 Note: Please turn off the TUN / TAP mode of the proxy software before use, otherwise it may go through the proxy when detecting whether the IP is available, which will lead to inaccurate test results.
 
-Check if multiple IP / Host are available:
+## Usage
+
+### Detects the list of IPs within this URL: https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt
+
+Equivalent to running `ggc -u https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt`.
+
+```text
+$ ggc
+Downloading the file from https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt
+Done.
+
+Start detecting. This takes a little time, up to 10 seconds.
+...
+```
+
+### Check if multiple IP / Host are available
 
 ```text
 $ ggc 172.253.114.90,172.217.203.90,142.250.4.90,www.baidu.com,translate.amz.wang,gtranslate.cdn.haah.net
-Please wait a moment, this may take a little time (up to 10 seconds)...
+Start detecting. This takes a little time, up to 10 seconds.
 ┌─────────┬───────────────────────────┬───────────┬─────────────┬───────────────┬─────────────────────────────────────────────────────────┐
 │ (index) │         IP / Host         │ Available │ Status Code │ Response time │                   Why not available?                    │
 ├─────────┼───────────────────────────┼───────────┼─────────────┼───────────────┼─────────────────────────────────────────────────────────┤
@@ -25,19 +42,27 @@ Please wait a moment, this may take a little time (up to 10 seconds)...
 └─────────┴───────────────────────────┴───────────┴─────────────┴───────────────┴─────────────────────────────────────────────────────────┘
 ```
 
-Load the IP / Host to be checked from the file:
+### Load the IP / Host to be checked from a file
+
+IP addresses / host in ips.txt need to be separated by line breaks.
 
 ```text
 $ ggc -f ips.txt
-Please wait a moment, this may take a little time (up to 10 seconds)...
+Loading file...
+Done.
+
+Start detecting. This takes a little time, up to 10 seconds.
 ...
 ```
 
-Load the IP / Host to be checked from URL:
+### Load the IP / Host to be checked from URL
 
 ```text
 $ ggc -u https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt
-Please wait a moment, this may take a little time (up to 10 seconds)...
+Downloading the file from https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt
+Done.
+
+Start detecting. This takes a little time, up to 10 seconds.
 ...
 ```
 
@@ -49,6 +74,9 @@ $ ggc -u https://raw.githubusercontent.com/hcfyapp/google-translate-cn-ip/master
 This proxy will be used to download file: http://example.com
 It will not be used to check if the IP / Host is available.
 
-Please wait a moment, this may take a little time (up to 10 seconds)...
+Downloading the file from https://raw.githubusercontent.com/hcfyapp/google-translate-cn-ip/master/packages/google-translate-ip/ips.txt
+Done.
+
+Start detecting. This takes a little time, up to 10 seconds.
 ...
 ```
