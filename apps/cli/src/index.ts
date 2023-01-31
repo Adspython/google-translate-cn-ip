@@ -13,7 +13,7 @@ function getErrorMessage(e: unknown) {
   return 'Unknown error.'
 }
 
-async function readFileFromFileSystem(path: string) {
+function readFileFromFileSystem(path: string) {
   return fs.readFile(path, { encoding: 'utf-8' })
 }
 
