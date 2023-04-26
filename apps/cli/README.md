@@ -12,13 +12,13 @@ Note: Please turn off the TUN / TAP mode of the proxy software before use, other
 
 ## Usage
 
-### Detects the list of IPs within this URL: https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt
+### Detects the list of IPs within this URL: https://unpkg.com/@hcfy/google-translate-ip/ips.txt
 
-Equivalent to running `ggc -u https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt`.
+Equivalent to running `ggc -u https://unpkg.com/@hcfy/google-translate-ip/ips.txt`.
 
 ```text
 $ ggc
-Downloading the file from https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt
+Downloading the file from https://unpkg.com/@hcfy/google-translate-ip/ips.txt
 Done.
 
 Start detecting. This takes a little time, up to 10 seconds.
@@ -58,8 +58,8 @@ Start detecting. This takes a little time, up to 10 seconds.
 ### Load the IP / Host to be checked from URL
 
 ```text
-$ ggc -u https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt
-Downloading the file from https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt
+$ ggc -u https://unpkg.com/@hcfy/google-translate-ip/ips.txt
+Downloading the file from https://unpkg.com/@hcfy/google-translate-ip/ips.txt
 Done.
 
 Start detecting. This takes a little time, up to 10 seconds.
