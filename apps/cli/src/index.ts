@@ -3,6 +3,7 @@
 import { program } from 'commander'
 import fs from 'node:fs/promises'
 import https from 'node:https'
+import axios from 'axios'
 import { checkAll } from '@hcfy/check-google-translate-ip'
 import HttpsProxyAgent = require('https-proxy-agent')
 
@@ -17,28 +18,9 @@ function readFileFromFileSystem(path: string) {
   return fs.readFile(path, { encoding: 'utf-8' })
 }
 
-function readFileFromURL(url: string, agent?: https.Agent) {
-  return new Promise<string>((resolve, reject) => {
-    const req = https.get(url, { agent }, (res) => {
-      if (res.statusCode !== 200) {
-        reject(
-          new Error('Request Failed with status code ' + res.statusCode + '.')
-        )
-        res.resume()
-        return
-      }
-      let rawData = ''
-      res.on('data', (chunk) => {
-        rawData += chunk
-      })
-      res.on('end', () => {
-        resolve(rawData)
-      })
-    })
-    req.on('error', (err) => {
-      reject(err)
-    })
-  })
+async function readFileFromURL(url: string, agent?: https.Agent) {
+  const r = await axios.get<string>(url, { httpsAgent: agent })
+  return r.data
 }
 
 type IPSource =

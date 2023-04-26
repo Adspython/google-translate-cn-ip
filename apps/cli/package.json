@@ -1,6 +1,6 @@
 {
   "name": "@hcfy/check-google-translate-ip-cli",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "",
   "bin": {
     "ggc": "./dist/index.js"
@@ -22,6 +22,7 @@
   "homepage": "https://github.com/hcfyapp/google-translate-cn-ip/tree/master/apps/cli#readme",
   "dependencies": {
     "@hcfy/check-google-translate-ip": "^1.0.0",
+    "axios": "^1.3.6",
     "commander": "^10.0.0",
     "https-proxy-agent": "^5.0.1"
   }
