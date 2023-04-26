@@ -82,7 +82,7 @@ async function main() {
       'after',
       `
 Example call:
-  $ ggc # Check the list of IPs from this URL: https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt
+  $ ggc # Check the list of IPs from this URL: https://unpkg.com/@hcfy/google-translate-ip/ips.txt
   $ ggc 172.253.114.90 # Check one IP address.
   $ ggc mirror.example.com # Check one host.
   $ ggc 172.253.114.90,mirror.example.com,142.250.9.90 # Check multiple IP addresses or host.
@@ -109,7 +109,7 @@ Example call:
   } else {
     source = {
       type: 'url',
-      value: 'https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt',
+      value: 'https://unpkg.com/@hcfy/google-translate-ip/ips.txt',
     }
   }
 
@@ -141,20 +141,26 @@ Example call:
 
   const sorted = await checkAll(list)
 
+  // let f = true
   // 生成公告里需要的 markdown 形式
   // TODO: 可以加个参数来输出这种格式
-  // console.log(
-  //   sorted
-  //     .map((v) => {
-  //       let s = `\`\`\`\n${v.ipOrHost} translate.googleapis.com`
-  //       if (!v.valid) {
-  //         s += '（可能已失效）'
+  // const txtResult = sorted
+  //   .map((v) => {
+  //     let s = ''
+  //
+  //     if (!v.valid) {
+  //       if (f) {
+  //         f = false
+  //         s += '\n--------------以下是失效的 IP -----------------\n'
   //       }
-  //       s += '\n```'
-  //       return s
-  //     })
-  //     .join('\n')
-  // )
+  //     }
+  //     s += `\`\`\`\n${v.host} translate.googleapis.com`
+  //     s += '\n```'
+  //     return s
+  //   })
+  //   .join('\n')
+  //
+  // fs.writeFile('./result.txt',txtResult,'utf-8')
 
   console.table(
     sorted.map((v) => {

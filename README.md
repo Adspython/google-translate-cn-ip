@@ -12,7 +12,7 @@ https://github.com/hcfyapp/google-translate-cn-ip/blob/master/packages/google-tr
 
 你可以通过以下链接读取到这个文件的最新内容：
 
-https://cdn.jsdelivr.net/npm/@hcfy/google-translate-ip/ips.txt
+https://unpkg.com/@hcfy/google-translate-ip/ips.txt
 
 ## 如何测试 IP 是否可用
 
